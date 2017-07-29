@@ -56,14 +56,14 @@ public class CameraController : MonoBehaviour
         {
             if (targetTransformPos.x < leftThreshold.x)
                 _currentOffset = -Data.Offset;
-            else if (targetPos.x < transform.position.x)
+            else if (targetPos.x < transform.position.x && targetPos.x > leftThreshold.x)
                 return;
         }
         else if (targetTransformPos.x > rightOffset.x)
         {
             if (targetTransformPos.x > rightThreshold.x)
                 _currentOffset = Data.Offset;
-            else if (targetPos.x > transform.position.x)
+            else if (targetPos.x > transform.position.x && targetPos.x < rightOffset.x)
                 return;
         }
 
@@ -83,6 +83,9 @@ public class CameraController : MonoBehaviour
 
     private void OnDrawGizmos()
     {
+        if (Data.TransformToFollow == null)
+            return;
+
         Gizmos.color = Color.red;
         Gizmos.DrawLine(transform.position - Vector3.up * 10, transform.position + Vector3.up * 10);
 
