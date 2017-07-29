@@ -4,11 +4,24 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    public static PlayerController Instance;
+
     public PlayerControllerData Data;
     public Rigidbody2D Body;
 
     private bool _hasPressedJump;
     private float _timeHoldingJumpButton;
+
+    public bool Active;
+
+    void Awake()
+    {
+        if (Instance != null)
+            Destroy(gameObject);
+
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
+    }
 
     private void Reset()
     {
@@ -17,6 +30,9 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (!Active)
+            return;
+
         var pressedJump = Input.GetButton(Data.JumpButtonName);
         var horizontal = Input.GetAxis(Data.HorizontalAxisName);
 
