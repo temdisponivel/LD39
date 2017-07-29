@@ -37,21 +37,37 @@ public class CameraController : MonoBehaviour
         Data.Offset = offset;
     }
 
-    private void Update()
+    private void LateUpdate()
     {
         if (!Active)
             return;
 
+
+        var targetPos = (Vector2)Data.TransformToFollow.position + _currentOffset;
+
         var leftThreshold = GetLeftThresholdPos();
         var rightThreshold = GetRightThresholdPos();
 
+        var leftOffset = GetLeftOffsetPos();
+        var rightOffset = GetRightOffsetPos();
         var targetTransformPos = Data.TransformToFollow.position;
-        if (targetTransformPos.x < leftThreshold.x)
-            _currentOffset = -Data.Offset;
-        else if (targetTransformPos.x > rightThreshold.x)
-            _currentOffset = Data.Offset;
 
-        var targetPos = (Vector2)Data.TransformToFollow.position + _currentOffset;
+        if (targetTransformPos.x < leftOffset.x)
+        {
+            if (targetTransformPos.x < leftThreshold.x)
+                _currentOffset = -Data.Offset;
+            else if (targetPos.x < transform.position.x)
+                return;
+        }
+        else if (targetTransformPos.x > rightOffset.x)
+        {
+            if (targetTransformPos.x > rightThreshold.x)
+                _currentOffset = Data.Offset;
+            else if (targetPos.x > transform.position.x)
+                return;
+        }
+
+        targetPos = (Vector2)Data.TransformToFollow.position + _currentOffset;
 
         if ((Data.Constraints & RigidbodyConstraints2D.FreezePositionX) == RigidbodyConstraints2D.FreezePositionX)
             targetPos.x = transform.position.x;
@@ -78,6 +94,8 @@ public class CameraController : MonoBehaviour
         pos = GetRightOffsetPos();
         Gizmos.DrawLine(pos - Vector3.up * 10, pos + Vector3.up * 10);
 
+        Gizmos.color = Color.blue;
+
         pos = GetLeftOffsetPos();
         Gizmos.DrawLine(pos - Vector3.up * 10, pos + Vector3.up * 10);
 
@@ -85,6 +103,8 @@ public class CameraController : MonoBehaviour
 
         pos = GetLeftThresholdPos();
         Gizmos.DrawLine(pos - Vector3.up * 10, pos + Vector3.up * 10);
+
+        Gizmos.color = Color.magenta;
 
         pos = GetRightThresholdPos();
         Gizmos.DrawLine(pos - Vector3.up * 10, pos + Vector3.up * 10);
@@ -105,19 +125,12 @@ public class CameraController : MonoBehaviour
     private Vector3 GetRightThresholdPos()
     {
         var pos = transform.position + (Vector3)_currentOffset;
-        if (_currentOffset.x < 0)
-            return pos - (Vector3)Data.DeadZone;
-        else
-            return pos + (Vector3)Data.DeadZone;
+        return pos + (Vector3)Data.DeadZone;
     }
 
     private Vector3 GetLeftThresholdPos()
     {
         var pos = transform.position - (Vector3)_currentOffset;
-        if (_currentOffset.x < 0)
-            return pos + (Vector3)Data.DeadZone;
-        else
-            return pos - (Vector3)Data.DeadZone;
-
+        return pos - (Vector3)Data.DeadZone;
     }
 }

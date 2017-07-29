@@ -33,7 +33,7 @@ public class GameManager : MonoBehaviour
         yield return SceneHandler.Instance.FadeOut();
 
         PlayerController.Instance.Active = true;
-        CameraController.Instance.PinToTransform(PlayerController.Instance.transform, Vector2.zero);
+        CameraController.Instance.PinToTransform(PlayerController.Instance.transform, Vector2.right * 1.5f);
 
         CameraController.Instance.Active = true;
     }
