@@ -37,9 +37,7 @@ public class SceneHandler : MonoBehaviour
         SceneManager.LoadScene(sceneName);
         yield return StartCoroutine(Fade(0));
 
-        // I know this is ugly and terrible, but it's easyer
-        var config = FindObjectOfType<SceneConfig>();
-        config.Setup();
+        SceneConfig.Instance.Setup();
 
         PlayerController.Instance.Active = true;
     }

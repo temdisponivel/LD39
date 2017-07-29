@@ -4,7 +4,13 @@ using UnityEngine;
 
 public class SceneConfig : MonoBehaviour
 {
+    public static SceneConfig Instance;
     public Transform PlayerStartPoint;
+
+    void Awake()
+    {
+        Instance = this;
+    }
     
     public void Setup()
     {

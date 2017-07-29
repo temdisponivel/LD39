@@ -20,6 +20,9 @@ public class PlayerControllerData
     public string JumpButtonName;
     public string HorizontalAxisName;
 
+    [Tooltip("The ammount to which displace the camera to look in 'front' of the player")]
+    public float CameraDisplacementWhenMoving;
+
     void Reset()
     {
         JumpButtonName = "Jump";

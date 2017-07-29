@@ -18,6 +18,8 @@ public class GameManager : MonoBehaviour
 
     public IEnumerator StartGame()
     {
+        CameraController.Instance.Active = false;
+
         // Force the gade to happen
         var sprite = SceneHandler.FadeSprite;
         if (sprite.color.a < 1)
@@ -26,11 +28,13 @@ public class GameManager : MonoBehaviour
         SceneHandler.FadeOut();
 
         Instantiate(PlayerPrefab.gameObject);
-        var sceneConfig = FindObjectOfType<SceneConfig>();
-        sceneConfig.Setup();
+        SceneConfig.Instance.Setup();
 
         yield return SceneHandler.Instance.FadeOut();
 
         PlayerController.Instance.Active = true;
+        CameraController.Instance.PinToTransform(PlayerController.Instance.transform, Vector2.zero);
+
+        CameraController.Instance.Active = true;
     }
 }
