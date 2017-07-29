@@ -39,6 +39,12 @@ public class CameraController : MonoBehaviour
 
     private void LateUpdate()
     {
+        if (!Data.ManualUpdate)
+            UpdateCamera();
+    }
+
+    public void UpdateCamera()
+    {
         if (!Active)
             return;
 

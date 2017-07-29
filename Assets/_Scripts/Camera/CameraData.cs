@@ -9,4 +9,5 @@ public class CameraData
     public Transform TransformToFollow;
     public Vector2 Offset;
     public Vector2 DeadZone;
+    public bool ManualUpdate;
 }
