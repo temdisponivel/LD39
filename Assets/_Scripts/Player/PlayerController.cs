@@ -34,6 +34,18 @@ public class PlayerController : MonoBehaviour
         Body = GetComponent<Rigidbody2D>();
     }
 
+    void Update()
+    {
+        if (Input.GetButtonDown("Interact"))
+        {
+            if (_availableDevices.Count == 0)
+                return;
+
+            var device = _availableDevices[0]; // always gets first
+            device.Interact();
+        }
+    }
+
     private void FixedUpdate()
     {
         if (!Active)
@@ -125,22 +137,21 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collider)
     {
-        var root = collider.transform.root;
-        if (root.gameObject.CompareTag("EnergyDevices"))
-        {
-            var energyDevice = root.GetComponentInChildren<EnergyDevice>();
-            if (!_availableDevices.Contains(energyDevice))
-                _availableDevices.Add(energyDevice);
-        }
+        var root = collider.transform;
+        var energyDevice = root.GetComponentInChildren<EnergyDevice>();
+        if (energyDevice == null)
+            return;
+
+        if (!_availableDevices.Contains(energyDevice))
+            _availableDevices.Add(energyDevice);
     }
 
     private void OnTriggerExit2D(Collider2D collider)
     {
-        var root = collider.transform.root;
-        if (root.gameObject.CompareTag("EnergyDevices"))
-        {
-            var energyDevice = root.GetComponentInChildren<EnergyDevice>();
-            _availableDevices.Remove(energyDevice);
-        }
+        var root = collider.transform;
+        var energyDevice = root.GetComponentInChildren<EnergyDevice>();
+        if (energyDevice == null)
+            return;
+        _availableDevices.Remove(energyDevice);
     }
 }
